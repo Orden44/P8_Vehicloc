@@ -8,6 +8,8 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Car>
+ * 
+ *  @method Car[] findAll()
  */
 class CarRepository extends ServiceEntityRepository
 {
