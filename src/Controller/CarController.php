@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\CarRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class CarController extends AbstractController
 {
@@ -31,13 +32,30 @@ class CarController extends AbstractController
         $car = $carRepository->find($id);
 
         if(!$car) {
-            // return $this->redirectToRoute('app_home');
             return $this->redirectToRoute('app_error');
         }
 
         return $this->render('car.html.twig', [
             'car' => $car,
         ]);
+    }
+
+    /**
+     * Suppression d'une voiture
+     */
+    #[Route('/car/{id}/delete', name: 'app_car_delete')]
+    public function deleteCar(CarRepository $carRepository, EntityManagerInterface $entityManager,  int $id): Response
+    {
+        $car = $carRepository->find($id);
+
+        if(!$car) {
+            return $this->redirectToRoute('app_error');
+        }
+
+        $entityManager->remove($car);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_home');
     }
 
     /**
