@@ -1,5 +1,5 @@
 <?php
-
+// src/Controller/CarController.php
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\CarRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Form\CarType;
+use App\Entity\Car;
+use Symfony\Component\HttpFoundation\Request;
 
 class CarController extends AbstractController
 {
@@ -20,6 +23,31 @@ class CarController extends AbstractController
 
         return $this->render('home.html.twig', [
             'cars' => $cars,
+        ]);
+    }
+
+    /**
+     * Page ajouter une voiture
+     */
+    #[Route('/car/add', name: 'app_car_add')]
+    public function createCar(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $car = new Car();
+
+        $form = $this->createForm(CarType::class, $car);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $car = $form->getData();
+
+            $entityManager->persist($car);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_car', ['id' => $car->getId()]);
+        }
+
+        return $this->render('new-car.html.twig', [
+            'form' => $form,
         ]);
     }
 
@@ -57,7 +85,7 @@ class CarController extends AbstractController
 
         return $this->redirectToRoute('app_home');
     }
-
+    
     /**
      * Page d'erreur
      */
