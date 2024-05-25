@@ -1,6 +1,5 @@
 <?php
 // src/DataFixtures/AppFixtures.php
-
 namespace App\DataFixtures;
 
 use App\Entity\Car;
@@ -11,14 +10,16 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        // create 20 products! Bam!
+        $faker = (new \Faker\Factory())::create();
+        $faker->addProvider(new \Faker\Provider\FakeCar($faker));
+        // create 5 cars!
         for ($i = 1; $i < 6; $i++) {
             $car = new Car();
-            $car->setName('Voiture '.$i);
-            $car->setContent('Description de la voiture '.$i);
-            $car->setMonthlyPrice(mt_rand(100, 1000));
-            $car->setDailyPrice(mt_rand(10, 100));
-            $car->setPlaces(mt_rand(2, 7));
+            $car->setName($faker->vehicle());
+            $car->setContent($car->getName().' est une voiture '.$faker->vehicleFuelType().' de type '.$faker->vehicleType());
+            $car->setDailyPrice(round(30 + mt_rand() / mt_getrandmax() * (600 - 580), 2));
+            $car->setMonthlyPrice(round(300 + mt_rand() / mt_getrandmax() * (10000 - 9000), 2));
+            $car->setPlaces(mt_rand(1, 9));
             $car->setGearbox(mt_rand(0, 1));
 
             $manager->persist($car);

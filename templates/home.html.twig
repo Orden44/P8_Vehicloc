@@ -22,12 +22,12 @@
         {% for car in cars %}
             <article>
                 <div class="mini-car-title">
-                    <a href="#">
+                    <a href="{{ path('app_car', {id: car.id}) }}">
                         <h3>{{ car.name }}</h3>
                         <p>ou similaire | Saint-Étienne</p>
                     </a>
                     <div>
-                        <a href="#"><img src="{{ asset('assets/icons/trash.png') }}" alt="Supprimer" /></a>
+                        <a href="{{ path('app_car_delete', {id: car.id}) }}"><img src="{{ asset('assets/icons/trash.png') }}" alt="Supprimer" onclick="return confirm('êtes-vous sûrs de vouloir supprimer cette voiture?')"/></a>
                     </div>
                 </div>
                 <div class="mini-car-icons">
@@ -37,7 +37,7 @@
                     </div>
                     <div>
                         <img src="{{ asset('assets/icons/motor.png') }}" alt="{{ car.gearbox ? 'Manuelle' : 'Automatique' }}" />
-                        <p>{{ car.gearbox ? 'Manuelle' : 'Automatique' }}</p>
+                        <p>{{ car.gearbox ? 'Automatique' : 'Manuelle' }}</p>
                     </div>
                     <div>
                         <img src="{{ asset('assets/icons/km.png') }}" alt="km illimités" />

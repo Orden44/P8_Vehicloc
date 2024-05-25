@@ -1,10 +1,11 @@
 <?php
-
+// src/Entity/Car.php
 namespace App\Entity;
 
 use App\Repository\CarRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CarRepository::class)]
 class Car
@@ -15,21 +16,28 @@ class Car
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank]
     private ?string $content = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?float $monthly_price = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?float $daily_price = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Range(min: 1, max: 9)]
     private ?int $places = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
     private ?bool $gearbox = null;
 
     public function getId(): ?int
